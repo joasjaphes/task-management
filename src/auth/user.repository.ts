@@ -28,11 +28,11 @@ export class UserRepository extends Repository<User> {
     }
   }
 
-  async validatePasswords(authCredentialsDto: AuthCredentialsDto) {
+  async signIn(authCredentialsDto: AuthCredentialsDto): Promise<string> {
     const { username, password } = authCredentialsDto;
     const user = await this.findOne({ username });
     if (user && (await user.validatePassword(password))) {
-      return user.username;
+      return username;
     } else {
       if (!user) {
         throw new UnauthorizedException('Wrong username');
